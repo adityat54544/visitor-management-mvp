@@ -1,0 +1,41 @@
+# MVP infrastructure — one-command setup
+#   MongoDB (REST API database) + mongo-express (web UI to view/edit data)
+#
+# Usage:
+#   docker compose up -d          # start everything
+#   docker compose down           # stop containers (data persists)
+#   docker compose down -v        # stop and DELETE all data
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: mvp-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017" # host:container — Node.js connects via mongodb://127.0.0.1:27017
+    environment:
+      MONGO_INITDB_DATABASE: mvp
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: mvp-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081" # web UI at http://localhost:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+volumes:
+  mongo_data:
