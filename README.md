@@ -38,7 +38,7 @@ docker compose up -d
 | Service         | URL / Port                     | Purpose                    |
 | --------------- | ------------------------------ | -------------------------- |
 | MongoDB         | `mongodb://127.0.0.1:27017/mvp` | App database (volume-backed) |
-| mongo-express   | http://localhost:8081          | Web UI — login `admin` / `admin` |
+| mongo-express   | http://localhost:8083          | Web UI — login `admin` / `admin` (on 8083 so it stays clear of Expo's Metro on 8081) |
 
 Stop: `docker compose down` · Stop + wipe data: `docker compose down -v`
 

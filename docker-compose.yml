@@ -28,7 +28,7 @@ services:
     container_name: mvp-mongo-express
     restart: unless-stopped
     ports:
-      - "8081:8081" # web UI at http://localhost:8081
+      - "8083:8081" # web UI at http://localhost:8083 (kept off 8081 so it doesn't clash with Expo/Metro)
     environment:
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_BASICAUTH_USERNAME: admin
