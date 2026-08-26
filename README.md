@@ -1,6 +1,8 @@
 # Visitor Management System 🪪
 
-**A production-grade full-stack Visitor Check-in app — React Native + Node.js + MongoDB**
+**A production-grade full-stack Visitor Check-in app — built mainly with React Native & Node.js**
+
+> **Core Stack:** `React Native` + `TypeScript` + `REST APIs` + `Node.js` + `Express` + `MongoDB`
 
 > Built by **[Aditya Tiwari](https://github.com/adityat54544)** · 📞 **+91 63908 57720**
 
@@ -25,12 +27,31 @@ hosts get notified instantly → managers view live dashboards & reports.
 
 ## 🛠 Tech Stack
 
+This project is built **mainly using React Native (mobile) and Node.js (backend)**, with:
+
 ```
-mobile/        React Native 0.86 · Expo SDK 57 · TypeScript · React Navigation · Reanimated
-server/        Node.js · Express · TypeScript · Mongoose · JWT · bcryptjs
-database/      MongoDB 7 (Docker) · mongo-express admin UI
-infra/         Docker Compose one-command setup
+✅ React Native      — cross-platform mobile app (Expo)
+✅ TypeScript        — end-to-end type safety on both client & server
+✅ REST APIs         — clean JSON API contract between app and backend
+✅ Node.js           — JavaScript runtime powering the backend
+✅ Express           — lightweight REST framework (routing, middleware, RBAC)
+✅ MongoDB           — NoSQL database via Mongoose ODM
 ```
+
+<details>
+<summary><b>Full dependency details</b></summary>
+
+```
+mobile/   React Native 0.86 · Expo SDK 57 · TypeScript · React Navigation · Reanimated
+          expo-camera (QR scanning) · AsyncStorage (JWT sessions) · react-native-svg
+server/   Node.js ≥ 20 · Express 4 · TypeScript (NodeNext) · Mongoose 8
+          jsonwebtoken (JWT auth) · bcryptjs (password hashing) · morgan (logging)
+database/ MongoDB 7 (Docker container) · mongo-express admin UI
+infra/    Docker Compose one-command local setup
+```
+
+</details>
+
 
 ## 🚀 Quick Start
 
