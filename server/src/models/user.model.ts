@@ -1,5 +1,8 @@
 import { Schema, model, type InferSchemaType } from 'mongoose';
 
+export const ROLES = ['admin', 'receptionist', 'manager'] as const;
+export type UserRole = (typeof ROLES)[number];
+
 const userSchema = new Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -11,7 +14,7 @@ const userSchema = new Schema(
       trim: true,
     },
     passwordHash: { type: String, required: true },
-    role: { type: String, enum: ['admin'], default: 'admin' },
+    role: { type: String, enum: ROLES, default: 'receptionist' },
   },
   { timestamps: true }
 );

@@ -20,7 +20,16 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
+  role: 'admin' | 'receptionist' | 'manager' | 'host';
+}
+
+export interface Notification {
+  _id: string;
+  title: string;
+  message: string;
+  isRead: boolean;
+  relatedVisitor?: { _id: string; name: string; phone?: string } | null;
+  createdAt: string;
 }
 
 export interface VisitorInput {

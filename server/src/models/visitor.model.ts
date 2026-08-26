@@ -14,6 +14,9 @@ const visitorSchema = new Schema(
     checkInTime: { type: Date, default: null },
     checkOutTime: { type: Date, default: null },
     registeredBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
+    photo: { type: String, default: '' }, // base64 data URL (MVP)
+    qrToken: { type: String, unique: true, sparse: true, index: true },
+    hostUserId: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   },
   { timestamps: true }
 );

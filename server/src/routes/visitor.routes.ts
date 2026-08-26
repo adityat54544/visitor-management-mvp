@@ -8,17 +8,24 @@ import {
   deleteVisitor,
   checkInVisitor,
   checkOutVisitor,
+  checkInByQr,
 } from '../controllers/visitor.controller.js';
-import { requireAuth } from '../middlewares/auth.js';
+import { requireAuth, requireRole } from '../middlewares/auth.js';
 
 const router = Router();
 
-// protect all visitor routes
+// protect all visitor routes — anyone authenticated can read
 router.use(requireAuth);
 
+// Read endpoints: available to all authenticated roles (receptionist, manager, admin)
 router.get('/today', getToday);
 router.get('/', getVisitors);
 router.get('/:id', getVisitorById);
+
+// QR scanner check-in (front-desk)
+router.post('/check-in/qr', checkInByQr);
+
+// Write endpoints (register, edit, delete, check in/out) — receptionists & above
 router.post('/', createVisitor);
 router.put('/:id', updateVisitor);
 router.delete('/:id', deleteVisitor);

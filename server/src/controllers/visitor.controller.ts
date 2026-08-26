@@ -1,5 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
+import { randomUUID } from 'crypto';
 import { VisitorModel, type Visitor } from '../models/visitor.model.js';
+import { UserModel } from '../models/user.model.js';
+import { NotificationModel } from '../models/notification.model.js';
 
 type VisitorInput = Partial<Visitor>;
 
@@ -108,6 +111,7 @@ export async function createVisitor(
     const visitor = await VisitorModel.create({
       ...body,
       status: body.status || 'expected',
+      qrToken: randomUUID(),
       registeredBy: (req as unknown as { userId: string }).userId,
     });
     res.status(201).json({ success: true, data: visitor });
@@ -156,6 +160,27 @@ export async function deleteVisitor(
   }
 }
 
+// Notify the host user (matched by name) — used on check-in / check-out.
+async function notifyHost(
+  visitor: Visitor,
+  type: 'check-in' | 'check-out'
+): Promise<void> {
+  if (!visitor.personToMeet) return;
+  const host = await UserModel.findOne({
+    name: { $regex: new RegExp(`^${visitor.personToMeet.trim()}$`, 'i') },
+  }).lean();
+  if (!host) return;
+
+  const action = type === 'check-in' ? 'checked in' : 'checked out';
+  await NotificationModel.create({
+    userId: host._id,
+    type,
+    title: `${visitor.name} ${action}`,
+    body: `${visitor.name} (${visitor.company || 'no company'}) ${action} at ${new Date().toLocaleTimeString()}.`,
+    visitorId: visitor._id ?? (visitor as unknown as { _id: string })._id,
+  });
+}
+
 // PATCH /api/visitors/:id/check-in
 export async function checkInVisitor(
   req: Request,
@@ -176,6 +201,7 @@ export async function checkInVisitor(
       res.status(404).json({ success: false, message: 'Visitor not found' });
       return;
     }
+    await notifyHost(visitor, 'check-in');
     res.json({ success: true, data: visitor });
   } catch (err) {
     next(err);
@@ -201,6 +227,39 @@ export async function checkOutVisitor(
       res.status(404).json({ success: false, message: 'Visitor not found' });
       return;
     }
+    await notifyHost(visitor, 'check-out');
+    res.json({ success: true, data: visitor });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// POST /api/visitors/check-in/qr  { qrToken } — used by the camera scanner
+export async function checkInByQr(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { qrToken } = req.body as { qrToken?: string };
+    if (!qrToken) {
+      res.status(400).json({ success: false, message: 'qrToken is required' });
+      return;
+    }
+    const visitor = await VisitorModel.findOneAndUpdate(
+      { qrToken },
+      {
+        status: 'checked-in',
+        checkInTime: new Date(),
+        $unset: { checkOutTime: 1 },
+      },
+      { new: true, runValidators: true }
+    ).lean();
+    if (!visitor) {
+      res.status(404).json({ success: false, message: 'Visitor not found for that QR code' });
+      return;
+    }
+    await notifyHost(visitor, 'check-in');
     res.json({ success: true, data: visitor });
   } catch (err) {
     next(err);
