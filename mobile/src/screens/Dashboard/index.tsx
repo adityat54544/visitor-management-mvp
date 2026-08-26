@@ -104,13 +104,21 @@ export function DashboardScreen() {
         />
       </View>
 
-      {/* Quick action */}
-      <GlassButton
-        label="Register visitor"
-        onPress={openRegister}
-        icon={<Text style={{ color: '#fff', fontSize: 18, fontWeight: '900' }}>+</Text>}
-        style={{ height: 52 }}
-      />
+      {/* Quick actions */}
+      <View style={styles.quickRow}>
+        <GlassButton
+          label="Register"
+          onPress={openRegister}
+          icon={<Text style={{ color: '#fff', fontSize: 18, fontWeight: '900' }}>+</Text>}
+          style={styles.quickBtn}
+        />
+        <GlassButton
+          label="Scan badge"
+          variant="success"
+          onPress={() => navigation.navigate('QrCheckin')}
+          style={styles.quickBtn}
+        />
+      </View>
 
       {/* Error banner */}
       {error && !loading ? (
@@ -152,6 +160,8 @@ const styles = StyleSheet.create({
   greeting: { fontSize: 14, color: colors.subtext, fontWeight: '600' },
   date: { fontSize: 24, fontWeight: '800', color: colors.text, marginTop: 2, marginBottom: 18 },
   stats: { flexDirection: 'row', gap: 10, marginBottom: 16 },
+  quickRow: { flexDirection: 'row', gap: 10, marginBottom: 4 },
+  quickBtn: { flex: 1, height: 52 },
   sectionHead: {
     flexDirection: 'row',
     justifyContent: 'space-between',

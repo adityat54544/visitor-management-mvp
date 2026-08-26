@@ -10,6 +10,10 @@ import { VisitorListScreen } from '../screens/VisitorList/index';
 import { RegisterVisitorScreen } from '../screens/RegisterVisitor/index';
 import { VisitorDetailsScreen } from '../screens/VisitorDetails/index';
 import { SettingsScreen } from '../screens/Settings/index';
+import { NotificationsScreen } from '../screens/Notifications/index';
+import { ReportsScreen } from '../screens/Reports/index';
+import { QrCheckinScreen } from '../screens/QrCheckin/index';
+import { AdminUsersScreen } from '../screens/AdminUsers/index';
 import { colors } from '../theme';
 import type { RootStackParamList, TabParamList } from './types';
 
@@ -48,6 +52,11 @@ function MainTabs() {
         name="RegisterTab"
         component={RegisterVisitorScreen}
         options={{ tabBarLabel: 'Register', tabBarIcon: ({ color }) => tabIcon('+', color) }}
+      />
+      <Tab.Screen
+        name="NotificationsTab"
+        component={NotificationsScreen}
+        options={{ tabBarLabel: 'Alerts', tabBarIcon: ({ color }) => tabIcon('✦', color) }}
       />
       <Tab.Screen
         name="SettingsTab"
@@ -92,6 +101,9 @@ export function AppNavigator() {
           <>
             <Stack.Screen name="Main" component={MainTabs} />
             <Stack.Screen name="VisitorDetails" component={VisitorDetailsScreen} />
+            <Stack.Screen name="QrCheckin" component={QrCheckinScreen} />
+            <Stack.Screen name="AdminUsers" component={AdminUsersScreen} />
+            <Stack.Screen name="Reports" component={ReportsScreen} />
           </>
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />

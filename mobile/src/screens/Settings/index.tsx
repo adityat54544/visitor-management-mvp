@@ -20,6 +20,9 @@ export function SettingsScreen() {
   const [next, setNext] = useState('');
   const [saving, setSaving] = useState(false);
 
+  const isAdmin = user?.role === 'admin';
+  const canSeeReports = isAdmin || user?.role === 'manager';
+
   const onSave = async () => {
     if (!current || !next) {
       Alert.alert('Fill both fields');
@@ -92,6 +95,28 @@ export function SettingsScreen() {
         />
         <GlassButton label="Update password" variant="subtle" onPress={onSave} loading={saving} />
       </GlassCard>
+
+      {(isAdmin || canSeeReports) && (
+        <>
+          <Text style={styles.section}>Management</Text>
+          {canSeeReports && (
+            <GlassButton
+              label="Visitor reports"
+              variant="subtle"
+              onPress={() => navigation.navigate('Reports')}
+              style={{ marginBottom: 10 }}
+            />
+          )}
+          {isAdmin && (
+            <GlassButton
+              label="Team & roles"
+              variant="subtle"
+              onPress={() => navigation.navigate('AdminUsers')}
+              style={{ marginBottom: 16 }}
+            />
+          )}
+        </>
+      )}
 
       <GlassButton label="Sign out" variant="danger" onPress={onLogout} style={{ marginTop: 4 }} />
     </ScreenContainer>

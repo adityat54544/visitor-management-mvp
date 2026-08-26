@@ -25,11 +25,14 @@ router.get('/:id', getVisitorById);
 // QR scanner check-in (front-desk)
 router.post('/check-in/qr', checkInByQr);
 
-// Write endpoints (register, edit, delete, check in/out) — receptionists & above
-router.post('/', createVisitor);
-router.put('/:id', updateVisitor);
-router.delete('/:id', deleteVisitor);
-router.patch('/:id/check-in', checkInVisitor);
-router.patch('/:id/check-out', checkOutVisitor);
+// Write endpoints (register, edit, check in/out) — front-desk roles & above
+const canModify = requireRole('admin', 'manager', 'receptionist');
+router.post('/', canModify, createVisitor);
+router.put('/:id', canModify, updateVisitor);
+router.patch('/:id/check-in', canModify, checkInVisitor);
+router.patch('/:id/check-out', canModify, checkOutVisitor);
+
+// Destructive — admins only
+router.delete('/:id', requireRole('admin'), deleteVisitor);
 
 export default router;

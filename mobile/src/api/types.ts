@@ -12,6 +12,8 @@ export interface Visitor {
   checkInTime?: string | null;
   checkOutTime?: string | null;
   registeredBy?: string | null;
+  photo?: string;
+  qrToken?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -25,10 +27,11 @@ export interface User {
 
 export interface Notification {
   _id: string;
+  type: 'check-in' | 'check-out';
   title: string;
-  message: string;
-  isRead: boolean;
-  relatedVisitor?: { _id: string; name: string; phone?: string } | null;
+  body: string;
+  read: boolean;
+  visitorId?: string | { _id: string; name: string } | null;
   createdAt: string;
 }
 
@@ -41,6 +44,7 @@ export interface VisitorInput {
   expectedTime?: string;
   checkInTime?: string;
   status?: VisitorStatus;
+  photo?: string;
 }
 
 export interface TodayResponse {

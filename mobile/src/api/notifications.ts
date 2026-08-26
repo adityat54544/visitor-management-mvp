@@ -16,6 +16,6 @@ export function markNotificationRead(id: string): Promise<Notification> {
 /** Mark all of the current user's notifications as read. */
 export function markAllNotificationsRead(): Promise<void> {
   return api<void>('/notifications/read-all', {
-    method: 'POST',
+    method: 'PATCH',
   });
 }

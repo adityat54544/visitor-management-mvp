@@ -6,7 +6,6 @@ export type TabParamList = {
   VisitorsTab: { initialStatus?: string } | undefined;
   RegisterTab: undefined;
   NotificationsTab: undefined;
-  ReportsTab: undefined;
   SettingsTab: undefined;
 };
 
@@ -16,4 +15,5 @@ export type RootStackParamList = {
   VisitorDetails: { visitor: Visitor };
   QrCheckin: undefined;
   AdminUsers: undefined;
+  Reports: undefined;
 };

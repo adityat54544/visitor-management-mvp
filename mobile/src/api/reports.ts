@@ -1,22 +1,22 @@
 import { api } from './client';
 
 export interface VisitorReport {
-  totalVisitors: number;
-  checkedIn: number;
-  checkedOut: number;
-  expected: number;
-  byDay: Array<{ date: string; count: number }>;
-  topPurposes: Array<{ purpose: string; count: number }>;
-  avgVisitMinutes: number | null;
+  from: string;
+  to: string;
+  totals: { total: number; checkedIn: number; checkedOut: number; expected: number };
+  byPurpose: Array<{ _id: string | null; count: number }>;
+  byCompany: Array<{ _id: string | null; count: number }>;
+  byHost: Array<{ _id: string | null; count: number }>;
+  daily: Array<{ _id: string; count: number }>;
 }
 
-/** Aggregate report for a date range (ISO date strings). */
+/** Aggregate report for a date range (ISO YYYY-MM-DD strings) — managers & above. */
 export function fetchReport(from: string, to: string): Promise<VisitorReport> {
   const q = new URLSearchParams({ from, to });
-  return api<VisitorReport>(`/reports?${q.toString()}`);
+  return api<VisitorReport>(`/reports/summary?${q.toString()}`);
 }
 
-/** Reports for the last N days ending today. */
+/** Report for the last N days ending today. */
 export function fetchRecentReport(days = 7): Promise<VisitorReport> {
   const to = new Date();
   const from = new Date();

@@ -161,8 +161,14 @@ export async function deleteVisitor(
 }
 
 // Notify the host user (matched by name) — used on check-in / check-out.
+interface HostNotifyTarget {
+  name: string;
+  company?: string;
+  personToMeet?: string;
+  _id: unknown;
+}
 async function notifyHost(
-  visitor: Visitor,
+  visitor: HostNotifyTarget,
   type: 'check-in' | 'check-out'
 ): Promise<void> {
   if (!visitor.personToMeet) return;
@@ -177,7 +183,7 @@ async function notifyHost(
     type,
     title: `${visitor.name} ${action}`,
     body: `${visitor.name} (${visitor.company || 'no company'}) ${action} at ${new Date().toLocaleTimeString()}.`,
-    visitorId: visitor._id ?? (visitor as unknown as { _id: string })._id,
+    visitorId: String(visitor._id),
   });
 }
 
