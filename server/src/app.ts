@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 
-import itemRoutes from './routes/item.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import visitorRoutes from './routes/visitor.routes.js';
 import { notFound } from './middlewares/notFound.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
@@ -18,7 +19,8 @@ app.get('/api/health', (_req, res) => {
 });
 
 // REST routes
-app.use('/api/items', itemRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/visitors', visitorRoutes);
 
 // 404 + centralized error handling
 app.use(notFound);

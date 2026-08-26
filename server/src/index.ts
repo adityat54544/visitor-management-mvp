@@ -3,11 +3,13 @@ dotenv.config();
 
 import { app } from './app.js';
 import { connectDB } from './config/db.js';
+import { seedDatabase } from './seed.js';
 
 const PORT = Number(process.env.PORT) || 5000;
 
 async function bootstrap() {
   await connectDB();
+  await seedDatabase();
 
   app.listen(PORT, () => {
     console.log(`🚀 API running at http://localhost:${PORT}`);
