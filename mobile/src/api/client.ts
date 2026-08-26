@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
-// Android emulator reaches the host machine via 10.0.2.2; iOS sim uses localhost.
-const HOST = Platform.OS === 'android' ? '10.0.2.2' : 'localhost';
-
-export const API_BASE_URL = `http://${HOST}:5000/api`;
+// Allow overriding via environment (EXPO_PUBLIC_* vars are baked in at build time).
+// Defaults keep local development working: Android emulator → 10.0.2.2, iOS sim → localhost.
+export const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL ??
+  `http://${Platform.OS === 'android' ? '10.0.2.2' : 'localhost'}:5000/api`;
 
 const TOKEN_KEY = 'vm.token';
 

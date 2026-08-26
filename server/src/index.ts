@@ -9,7 +9,10 @@ const PORT = Number(process.env.PORT) || 5000;
 
 async function bootstrap() {
   await connectDB();
-  await seedDatabase();
+  // Demo seeding only when explicitly enabled (never in production unless opted-in)
+  if (process.env.ENABLE_DEMO_SEED === 'true') {
+    await seedDatabase();
+  }
 
   app.listen(PORT, () => {
     console.log(`🚀 API running at http://localhost:${PORT}`);
